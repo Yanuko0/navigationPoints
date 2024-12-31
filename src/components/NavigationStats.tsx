@@ -677,15 +677,21 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                           }}
                         >
                           <Statistic
-                            title={<span style={{ color: colors.text }}
-                            >總里程</span>}
+                            title={<span style={{ 
+                              color: colors.text , 
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              fontSize: '16px'
+                            }}
+                            >Total Mileage</span>}
                             value={Number(personalStats?.totalDistance || 0).toFixed(1)}
                             suffix="km"
                             prefix={<CarOutlined style={{ color: colors.primary }} />}
                             valueStyle={{ 
                               color: colors.primary,
-                            //   fontSize: '20px',
-                            //   whiteSpace: 'nowrap'
+                              display: 'flex',
+                              justifyContent: 'center',
                             }}
                           />
                         </Card>
@@ -704,14 +710,20 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                           }}
                         >
                           <Statistic
-                            title={<span style={{ color: colors.text }}>總時間</span>}
-                            value={Number(personalStats?.totalDuration || 0).toFixed(1)}
-                            suffix="分鐘"
+                            title={<span style={{ 
+                              color: colors.text , 
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              fontSize: '16px'
+                            }}>Total Hours</span>}
+                            value={ (Number(personalStats?.totalDuration || 0) / 60).toFixed(1) }
+                            suffix="hr"
                             prefix={<ClockCircleOutlined style={{ color: colors.primary }} />}
                             valueStyle={{ 
                               color: colors.primary,
-                             
-                            //   whiteSpace: 'nowrap'
+                              display: 'flex',
+                              justifyContent: 'center',
                             }}
                           />
                         </Card>
@@ -730,15 +742,23 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                           }}
                         >
                           <Statistic
-                            title={<span style={{ color: colors.text }}>總油費</span>}
-                            value={personalStats?.totalFuelCost || 0}
+                            title={<span 
+                              style={{ 
+                                color: colors.text , 
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                fontSize: '16px'
+                              }}
+                              >Total Fuel Cost</span>}
+                            value={(personalStats?.totalFuelCost || 0).toFixed(2)}
                             prefix={<DollarOutlined style={{ color: colors.primary }} />}
                             suffix="€"
                             valueStyle={{ 
-                                color: colors.primary,
-                                
-                                // whiteSpace: 'nowrap'
-                              }}
+                              color: colors.primary,
+                              display: 'flex',
+                              justifyContent: 'center',
+                            }}
                           />
                         </Card>
                       </Col>
@@ -756,13 +776,19 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                           }}
                         >
                           <Statistic
-                            title={<span style={{ color: colors.text }}>導航次數</span>}
+                            title={<span style={{ 
+                              color: colors.text , 
+                              display: 'flex',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              fontSize: '16px'
+                            }}>Navigation Usage</span>}
                             value={personalStats?.totalNavigations || 0}
                             prefix={<CompassOutlined style={{ color: colors.primary }} />}
                             valueStyle={{ 
                                 color: colors.primary,
-                               
-                                // whiteSpace: 'nowrap'
+                                display: 'flex',
+                                justifyContent: 'center',
                               }}
                           />
                         </Card>
@@ -816,7 +842,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                                 width: '100%'
                               }}>
                                 <Tag color={colors.primary}>{record.distance.toFixed(1)} km</Tag>
-                                <Tag color={colors.secondary}>{record.duration.toFixed(0)} 分鐘</Tag>
+                                <Tag color={colors.secondary}>{record.duration.toFixed(0)} min</Tag>
                                 <Tag color={colors.accent}>{record.fuelCost.toFixed(2)} €</Tag>
                               </div>
                             }
