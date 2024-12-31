@@ -665,7 +665,13 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             backgroundColor: colors.secondary,
                             borderRadius: '12px',
                             border: 'none',
-                            height: '100%'
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            WebkitBoxAlign: 'center',
+                            WebkitBoxPack: 'center'
                           }}
                         >
                           <Statistic
@@ -675,7 +681,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             prefix={<CarOutlined style={{ color: colors.primary }} />}
                             valueStyle={{ 
                               color: colors.primary,
-                              fontSize: '20px',
+                              fontSize: '16px',
                               whiteSpace: 'nowrap'
                             }}
                           />
@@ -687,7 +693,13 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             backgroundColor: colors.secondary,
                             borderRadius: '12px',
                             border: 'none',
-                            height: '100%'
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            WebkitBoxAlign: 'center',
+                            WebkitBoxPack: 'center'
                           }}
                         >
                           <Statistic
@@ -697,7 +709,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             prefix={<ClockCircleOutlined style={{ color: colors.primary }} />}
                             valueStyle={{ 
                               color: colors.primary,
-                              fontSize: '20px',
+                              fontSize: '16px',
                               whiteSpace: 'nowrap'
                             }}
                           />
@@ -709,7 +721,13 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             backgroundColor: colors.secondary,
                             borderRadius: '12px',
                             border: 'none',
-                            height: '100%'
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            WebkitBoxAlign: 'center',
+                            WebkitBoxPack: 'center'
                           }}
                         >
                           <Statistic
@@ -727,7 +745,13 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             backgroundColor: colors.secondary,
                             borderRadius: '12px',
                             border: 'none',
-                            height: '100%'
+                            height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            WebkitBoxAlign: 'center',
+                            WebkitBoxPack: 'center'
                           }}
                         >
                           <Statistic
