@@ -271,17 +271,18 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
           style={{
             cursor: 'pointer',
             position: 'absolute',
-            bottom: showCard ? '20px' : '-200px',
+            bottom: showCard ? '12px' : '-200px',
             left: '50%',
             transform: 'translateX(-50%)',
-            width: '90%',
+            width: '100%',
             maxWidth: '800px',
-            background: colors.cardBg,
+            // background: colors.cardBg,
+            backgroundColor: 'rgba(240, 229, 222, 0.9)',
             borderRadius: '16px',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
             transition: 'bottom 0.3s ease-in-out',
             zIndex: 1000,
-            border: `1px solid ${colors.border}`
+            // border: `1px solid ${colors.border}`
           }}
           styles={{ 
             body: { 
@@ -292,12 +293,13 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
         >
           <div style={{ 
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'row',
             alignItems: 'center',
-            gap: '16px'
+            gap: '16px',
+            // border: `1px solid ${colors.border}`,
           }}>
             <div style={{
-              display: 'flex',
+              display: 'none',
               flexDirection: 'column',
               alignItems: 'center',
               gap: '8px'
@@ -328,7 +330,7 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
 
             <div style={{
               display: 'flex',
-              flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+              // flexDirection: window.innerWidth < 768 ? 'column' : 'row',
               gap: '12px',
               justifyContent: 'center',
               width: '100%'
@@ -345,15 +347,15 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
                 minWidth: window.innerWidth < 768 ? 'auto' : '100px',
                 width: window.innerWidth < 768 ? '100%' : 'auto'
               }}>
+                 <span style={{ 
+                  fontSize: '15px',
+                  color: colors.text
+                }}>總距離</span>
                 <span style={{ 
                   fontSize: '18px',
                   fontWeight: '500',
                   color: colors.primary
                 }}>{distance}</span>
-                <span style={{ 
-                  fontSize: '12px',
-                  color: colors.text
-                }}>總距離</span>
               </div>
 
               <div style={{
@@ -368,15 +370,15 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
                 minWidth: window.innerWidth < 768 ? 'auto' : '100px',
                 width: window.innerWidth < 768 ? '100%' : 'auto'
               }}>
+                <span style={{ 
+                  fontSize: '15px',
+                  color: colors.text
+                }}>預計時間</span>
                 <span style={{ 
                   fontSize: '18px',
                   fontWeight: '500',
                   color: colors.primary
                 }}>{duration}</span>
-                <span style={{ 
-                  fontSize: '12px',
-                  color: colors.text
-                }}>預計時間</span>
               </div>
 
               <div style={{
@@ -391,15 +393,16 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
                 minWidth: window.innerWidth < 768 ? 'auto' : '100px',
                 width: window.innerWidth < 768 ? '100%' : 'auto'
               }}>
+                
+                <span style={{ 
+                  fontSize: '15px',
+                  color: colors.text
+                }}>預估油費</span>
                 <span style={{ 
                   fontSize: '18px',
                   fontWeight: '500',
                   color: colors.primary
                 }}>€{fuelCost}</span>
-                <span style={{ 
-                  fontSize: '12px',
-                  color: colors.text
-                }}>預估油費</span>
               </div>
             </div>
           </div>
@@ -412,7 +415,7 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
           bottom: 0,
           left: 0,
           right: 0,
-          padding: '16px',
+          padding: '10px',
           background: colors.cardBg,
           borderTop: `1px solid ${colors.border}`,
           display: 'flex',

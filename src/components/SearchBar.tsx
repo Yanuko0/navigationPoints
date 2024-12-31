@@ -198,8 +198,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect, currentLocation, placeh
             icon={<SearchOutlined />}
             loading={isSearching}
             style={{
-              backgroundColor: '#1890ff',
-              borderColor: '#1890ff',
+              backgroundColor: '#f4a261', // 柔和的橙色
+              color: '#ffffff', // 白色字體
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)', // 更柔和的按鈕陰影
             }}
           />
         </Space.Compact>
@@ -211,23 +212,36 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect, currentLocation, placeh
               top: '100%',
               left: 0,
               right: 0,
+              width: '100%',
               zIndex: 1000,
-              background: '#fff',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-              borderRadius: '4px',
-              marginTop: '4px'
+              background: 'linear-gradient(135deg, rgba(211, 192, 182, 0.7), rgba(232, 211, 195, 0.7))',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+              borderRadius: '8px',
+              marginTop: '1px',
+              color: '#4f4f4f', // 柔和的深灰色
             }}
           >
             {options.map((option) => (
               <List.Item
                 key={option.key}
-                style={{ padding: '16px 24px', cursor: 'pointer' }}
+                style={{
+                  padding: '12px 24px',
+                  cursor: 'pointer',
+                  color: '#4f4f4f', // 柔和的深灰色
+                  backgroundColor: 'rgba(240, 229, 222, 0.7)', // 柔和的莫蘭迪色系背景
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                }}
                 onClick={() => handleLocationSelect(option)}
                 actions={[
                   selectedLocation?.value === option.value && (
                     <Button
                       key="navigate"
                       type="primary"
+                      style={{
+                        backgroundColor: '#f4a261', // 柔和的橙色
+                        color: '#ffffff', // 白色字體
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)', // 更柔和的按鈕陰影
+                      }}
                       icon={<CompassOutlined />}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -241,8 +255,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect, currentLocation, placeh
                 ]}
               >
                 <List.Item.Meta
-                  title={option.value}
-                  description={option.address}
+                  title={<span style={{ color: '#4f4f4f' }}>{option.value}</span>} // 柔和的深灰色
+                  description={<span style={{ color: '#7d7d7d' }}>{option.address}</span>} // 柔和的灰色
                 />
               </List.Item>
             ))}
