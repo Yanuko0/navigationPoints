@@ -7,6 +7,7 @@ import NavigationStats from './components/NavigationStats';
 import React, { useState } from 'react';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import './App.css';
+import { LanguageProvider } from './context/LanguageContext';
 
 const { Header, Content } = Layout;
 
@@ -18,14 +19,7 @@ const CustomHeader = ({ currentLocation, handleDestinationSelect }) => {
   if (location.pathname === '/stats') {
     return (
       <Header style={{
-        // background: '#fff',
-        // padding: '1rem',
-        // position: 'fixed',
-        // zIndex: 1,
-        // width: '100%',
         height: 'auto',
-        // boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-        // display: 'flex',
         alignItems: 'center'
       }}>
       </Header>
@@ -60,6 +54,7 @@ function App() {
   }
 
   return (
+    <LanguageProvider>
     <Router>
       <Layout>
         <CustomHeader 
@@ -68,8 +63,6 @@ function App() {
         />
         <Content style={{
           padding: '1rem',
-          // height: '100vh',
-          // border: `20px solid black`,
           display: 'flex',
           flexDirection: 'column'
         }}>
@@ -101,6 +94,7 @@ function App() {
         </Content>
       </Layout>
     </Router>
+    </LanguageProvider>
   );
 }
 

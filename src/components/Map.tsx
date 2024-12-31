@@ -249,7 +249,7 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
         icon={<AimOutlined style={{ color: colors.primary }} />}
         style={{
           position: 'absolute',
-          top: 'calc(63% - 60px)',
+          top: 'calc(65% - 60px)',
           right: '10px',
           width: '40px',
           height: '40px',

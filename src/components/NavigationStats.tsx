@@ -833,12 +833,12 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
               key: "2",
               label: "每週任務",
               children: (
-                <div style={{ padding: '20px' }}>
+                <div style={{ padding: '3px' }}>
                   <Card 
                     style={{ 
                       background: colors.cardBg,
                       borderColor: colors.secondary,
-                      margin: '20px 0'
+                      margin: '10px 0'
                     }}
                   >
                     <div style={{ textAlign: 'center', marginBottom: '24px' }}>
@@ -986,12 +986,12 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
               key: "3",
               label: "排行榜",
               children: (
-                <div style={{ padding: '20px' }}>
+                <div style={{ padding: '3px' }}>
                   <div style={{ 
                     display: 'flex', 
                     flexWrap: 'wrap', 
                     gap: '12px',
-                    marginBottom: '24px' 
+                    marginBottom: '10px' 
                   }}>
                     {[
                       { key: 'distance', label: '總里程排名', color: '#FF9B7D' },
@@ -1092,7 +1092,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
               key: "4",
               label: "效率分析",
               children: (
-                <div style={{ padding: '20px' }}>
+                <div style={{ padding: '3px' }}>
                   {/* 彩色按鈕組 */}
                   <div style={{ 
                     display: 'flex', 
@@ -1285,12 +1285,12 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
               key: "5",
               label: "累積成就",
               children: (
-                <div style={{ padding: '20px' }}>
+                <div style={{ padding: '3px' }}>
                   <Card 
                     style={{ 
                       background: colors.cardBg,
                       borderColor: colors.secondary,
-                      margin: '20px 0'
+                      margin: '0px 0'
                     }}
                   >
                     {/* 累積成就積分卡片 */}

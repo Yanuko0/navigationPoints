@@ -197,6 +197,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect, currentLocation, placeh
             onClick={() => handleSearch(inputValue)}
             icon={<SearchOutlined />}
             loading={isSearching}
+            style={{
+              backgroundColor: '#1890ff',
+              borderColor: '#1890ff',
+            }}
           />
         </Space.Compact>
         
@@ -220,7 +224,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect, currentLocation, placeh
                 style={{ padding: '16px 24px', cursor: 'pointer' }}
                 onClick={() => handleLocationSelect(option)}
                 actions={[
-                  option.value === selectedLocation?.value && (
+                  selectedLocation?.value === option.value && (
                     <Button
                       key="navigate"
                       type="primary"

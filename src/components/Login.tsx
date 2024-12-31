@@ -39,17 +39,7 @@ const moonShine = keyframes`
   }
 `;
 
-const SunIconStyled = styled(SunOutlined)`
-  font-size: 38px;
-  color: #FFB347;
-  animation: ${rotate} 12s linear infinite, ${shine} 3s ease-in-out infinite;
-`;
 
-const MoonIconStyled = styled(MoonOutlined)`
-  font-size: 38px;
-  color: #FFD700;
-  animation: ${moonShine} 3s ease-in-out infinite;
-`;
 
 interface StyledProps {
   colors?: {
@@ -130,6 +120,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     cardBg: '#312C2B'        // 卡片背景
   };
 
+  
   const colors = isDarkMode ? darkColors : lightColors;
 
   const toggleTheme = () => {
