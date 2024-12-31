@@ -662,7 +662,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                 <Row gutter={[16, 16]}>
                   <Col xs={24}>
                     <Row gutter={[16, 16]} style={{ marginBottom: '24px' }}>
-                      <Col xs={12} sm={12} md={6}>
+                      <Col xs={24} sm={12} md={6}>
                         <Card
                           style={{ 
                             backgroundColor: colors.secondary,
@@ -677,19 +677,20 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                           }}
                         >
                           <Statistic
-                            title={<span style={{ color: colors.text }}>總里程</span>}
+                            title={<span style={{ color: colors.text }}
+                            >總里程</span>}
                             value={Number(personalStats?.totalDistance || 0).toFixed(1)}
                             suffix="km"
                             prefix={<CarOutlined style={{ color: colors.primary }} />}
                             valueStyle={{ 
                               color: colors.primary,
-                              
+                            //   fontSize: '20px',
                             //   whiteSpace: 'nowrap'
                             }}
                           />
                         </Card>
                       </Col>
-                      <Col xs={12} sm={12} md={6}>
+                      <Col xs={24} sm={12} md={6}>
                         <Card
                           style={{ 
                             backgroundColor: colors.secondary,
@@ -715,7 +716,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                           />
                         </Card>
                       </Col>
-                      <Col xs={12} sm={12} md={6}>
+                      <Col xs={24} sm={12} md={6}>
                         <Card
                           style={{ 
                             backgroundColor: colors.secondary,
@@ -741,7 +742,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                           />
                         </Card>
                       </Col>
-                      <Col xs={12} sm={12} md={6}>
+                      <Col xs={24} sm={12} md={6}>
                         <Card
                           style={{ 
                             backgroundColor: colors.secondary,
