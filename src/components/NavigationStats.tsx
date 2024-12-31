@@ -619,9 +619,8 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
 
   return (
     <div style={{ 
-      padding: '20px',
+      padding: '10px',
       backgroundColor: colors.background,
-      minHeight: '100vh'
     }}>
       <FloatButton
         icon={<ArrowLeftOutlined />}
@@ -637,7 +636,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
       <div style={{
         backgroundColor: colors.cardBg,
         borderRadius: '16px',
-        padding: '24px',
+        padding: '16px',
         boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
       }}>
         <h2 style={{ 
@@ -650,7 +649,8 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
         <Tabs 
           defaultActiveKey="1" 
           type="card"
-          style={{ color: colors.text }}
+          style={{ color: colors.text ,
+          }}
           items={[
             {
               key: "1",
@@ -669,9 +669,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
-                            alignItems: 'center',
-                            WebkitBoxAlign: 'center',
-                            WebkitBoxPack: 'center'
+                            alignItems: 'center'
                           }}
                         >
                           <Statistic
@@ -681,8 +679,8 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             prefix={<CarOutlined style={{ color: colors.primary }} />}
                             valueStyle={{ 
                               color: colors.primary,
-                              fontSize: '16px',
-                              whiteSpace: 'nowrap'
+                              fontSize: '20px', // 限制字體大小
+                            //   whiteSpace: 'nowrap'
                             }}
                           />
                         </Card>
@@ -697,9 +695,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
-                            alignItems: 'center',
-                            WebkitBoxAlign: 'center',
-                            WebkitBoxPack: 'center'
+                            alignItems: 'center'
                           }}
                         >
                           <Statistic
@@ -709,8 +705,8 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             prefix={<ClockCircleOutlined style={{ color: colors.primary }} />}
                             valueStyle={{ 
                               color: colors.primary,
-                              fontSize: '16px',
-                              whiteSpace: 'nowrap'
+                              fontSize: '20px', // 限制字體大小
+                            //   whiteSpace: 'nowrap'
                             }}
                           />
                         </Card>
@@ -725,9 +721,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
-                            alignItems: 'center',
-                            WebkitBoxAlign: 'center',
-                            WebkitBoxPack: 'center'
+                            alignItems: 'center'
                           }}
                         >
                           <Statistic
@@ -735,7 +729,11 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             value={personalStats?.totalFuelCost || 0}
                             prefix={<DollarOutlined style={{ color: colors.primary }} />}
                             suffix="€"
-                            valueStyle={{ color: colors.primary }}
+                            valueStyle={{ 
+                                color: colors.primary,
+                                fontSize: '20px', // 限制字體大小
+                                // whiteSpace: 'nowrap'
+                              }}
                           />
                         </Card>
                       </Col>
@@ -750,15 +748,17 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            WebkitBoxAlign: 'center',
-                            WebkitBoxPack: 'center'
                           }}
                         >
                           <Statistic
                             title={<span style={{ color: colors.text }}>導航次數</span>}
                             value={personalStats?.totalNavigations || 0}
                             prefix={<CompassOutlined style={{ color: colors.primary }} />}
-                            valueStyle={{ color: colors.primary }}
+                            valueStyle={{ 
+                                color: colors.primary,
+                                fontSize: '20px', // 限制字體大小
+                                // whiteSpace: 'nowrap'
+                              }}
                           />
                         </Card>
                       </Col>
@@ -767,24 +767,44 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                       style={{
                         backgroundColor: colors.cardBg,
                         borderRadius: '12px',
-                        padding: '16px'
+                        padding: '8px',
+                        
                       }}
                       dataSource={navigationHistory}
                       renderItem={record => (
                         <List.Item
                           style={{
                             borderBottom: `1px solid ${colors.secondary}`,
-                            padding: '16px'
+                            padding: '16px',
+                            display: 'flex',
+                            
                           }}
                         >
                           <List.Item.Meta
                             title={
-                              <span style={{ color: colors.text }}>
+                              <span style={{ 
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                width: '160px',
+                                height: '20px',
+                                alignItems: 'center',
+                                textAlign: 'center',
+                               
+                              }}>
                                 {record.destinationName}
                               </span>
                             }
                             description={
-                              <span style={{ color: colors.text }}>
+                              <span style={{ color: colors.text,
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                width: '160px',
+                                alignItems: 'center',
+                                textAlign: 'center',
+                                
+                              }}>
                                 {new Date(record.timestamp).toLocaleString()}
                               </span>
                             }
