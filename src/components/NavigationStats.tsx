@@ -619,7 +619,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
 
   return (
     <div style={{ 
-      padding: '10px',
+      padding: '13px',
       backgroundColor: colors.background,
     }}>
       <FloatButton
@@ -627,9 +627,10 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
         onClick={() => navigate(-1)}
         style={{
           top: 24,
-          left: 24,
+          left: 12,
           backgroundColor: 'rgba(255, 255, 255, 0.8)',
-          backdropFilter: 'blur(8px)'
+          backdropFilter: 'blur(8px)',
+            // border: `1px solid black`
         }}
       />
       
@@ -637,13 +638,15 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
         backgroundColor: colors.cardBg,
         borderRadius: '16px',
         padding: '16px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.05)'
+        boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+        // border: `1px solid ${colors.secondary}`
       }}>
         <h2 style={{ 
           color: colors.text,
-          marginBottom: '24px',
+          marginBottom: '16px',
           fontSize: '24px',
-          fontWeight: 600
+          fontWeight: 600,
+        //   border: `1px solid ${colors.secondary}`
         }}>導航統計</h2>
 
         <Tabs 
@@ -669,7 +672,8 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
-                            alignItems: 'center'
+                            alignItems: 'center',
+                            // border: `1px solid black`
                           }}
                         >
                           <Statistic
@@ -679,7 +683,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             prefix={<CarOutlined style={{ color: colors.primary }} />}
                             valueStyle={{ 
                               color: colors.primary,
-                              fontSize: '20px', // 限制字體大小
+                              
                             //   whiteSpace: 'nowrap'
                             }}
                           />
@@ -705,7 +709,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             prefix={<ClockCircleOutlined style={{ color: colors.primary }} />}
                             valueStyle={{ 
                               color: colors.primary,
-                              fontSize: '20px', // 限制字體大小
+                             
                             //   whiteSpace: 'nowrap'
                             }}
                           />
@@ -731,7 +735,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             suffix="€"
                             valueStyle={{ 
                                 color: colors.primary,
-                                fontSize: '20px', // 限制字體大小
+                                
                                 // whiteSpace: 'nowrap'
                               }}
                           />
@@ -756,7 +760,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             prefix={<CompassOutlined style={{ color: colors.primary }} />}
                             valueStyle={{ 
                                 color: colors.primary,
-                                fontSize: '20px', // 限制字體大小
+                               
                                 // whiteSpace: 'nowrap'
                               }}
                           />
@@ -768,6 +772,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                         backgroundColor: colors.cardBg,
                         borderRadius: '12px',
                         padding: '8px',
+                        //  border: `1px solid black`
                         
                       }}
                       dataSource={navigationHistory}
@@ -777,43 +782,45 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                             borderBottom: `1px solid ${colors.secondary}`,
                             padding: '16px',
                             display: 'flex',
-                            
+                            //  border: `1px solid black`
                           }}
                         >
                           <List.Item.Meta
                             title={
-                              <span style={{ 
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'center',
-                                width: '160px',
-                                height: '20px',
+                              <div style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between', 
                                 alignItems: 'center',
-                                textAlign: 'center',
-                               
+                                width: '100%'
                               }}>
-                                {record.destinationName}
-                              </span>
+                                <span style={{ 
+                                  color: colors.text, 
+                                  fontWeight: 'bold' 
+                                }}>
+                                  {record.destinationName}
+                                </span>
+                                <span style={{ 
+                                  color: colors.text, 
+                                  fontSize: '12px' 
+                                }}>
+                                  {new Date(record.timestamp).toLocaleString()}
+                                </span>
+                              </div>
                             }
                             description={
-                              <span style={{ color: colors.text,
-                                display: 'flex',
-                                flexDirection: 'row',
-                                justifyContent: 'center',
-                                width: '160px',
+                              <div style={{ 
+                                display: 'flex', 
+                                justifyContent: 'start', 
                                 alignItems: 'center',
-                                textAlign: 'center',
-                                
+                                width: '100%'
                               }}>
-                                {new Date(record.timestamp).toLocaleString()}
-                              </span>
+                                <Tag color={colors.primary}>{record.distance.toFixed(1)} km</Tag>
+                                <Tag color={colors.secondary}>{record.duration.toFixed(0)} 分鐘</Tag>
+                                <Tag color={colors.accent}>{record.fuelCost.toFixed(2)} €</Tag>
+                              </div>
                             }
                           />
-                          <div>
-                            <Tag color={colors.primary}>{record.distance.toFixed(1)} km</Tag>
-                            <Tag color={colors.secondary}>{record.duration.toFixed(0)} 分鐘</Tag>
-                            <Tag color={colors.accent}>{record.fuelCost.toFixed(2)} €</Tag>
-                          </div>
+                         
                         </List.Item>
                       )}
                     />

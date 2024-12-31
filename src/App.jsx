@@ -25,7 +25,7 @@ const CustomHeader = ({ currentLocation, handleDestinationSelect }) => {
         // width: '100%',
         height: 'auto',
         // boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-        display: 'flex',
+        // display: 'flex',
         alignItems: 'center'
       }}>
       </Header>
@@ -68,7 +68,8 @@ function App() {
         />
         <Content style={{
           padding: '1rem',
-          height: '100vh',
+          // height: '100vh',
+          // border: `20px solid black`,
           display: 'flex',
           flexDirection: 'column'
         }}>
