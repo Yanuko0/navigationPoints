@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Tabs, Card, List, Statistic, Row, Col, Timeline, Tag, FloatButton, Progress, Button } from 'antd';
+import { Tabs, Card, List, Statistic, Row, Col, Timeline, Tag, FloatButton, Progress, Button, Pagination } from 'antd';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { TrophyOutlined, ClockCircleOutlined, DollarOutlined, CarOutlined, EnvironmentOutlined, CompassOutlined, ArrowLeftOutlined, CheckOutlined, FireOutlined, CrownOutlined } from '@ant-design/icons';
@@ -212,6 +212,15 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
       icon: '👑'
     }
   ]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const paginatedData = navigationHistory.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   // 獲取個人統計
   const fetchPersonalStats = async () => {
@@ -617,6 +626,8 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
     fetchAchievements();
   }, [username]);
 
+  const sortedNavigationHistory = navigationHistory.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
   return (
     <div style={{ 
       padding: '13px',
@@ -802,7 +813,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                         //  border: `1px solid black`
                         
                       }}
-                      dataSource={navigationHistory}
+                      dataSource={paginatedData}
                       renderItem={record => (
                         <List.Item
                           style={{
@@ -850,6 +861,12 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                          
                         </List.Item>
                       )}
+                    />
+                    <Pagination
+                      current={currentPage}
+                      pageSize={pageSize}
+                      total={navigationHistory.length}
+                      onChange={handlePageChange}
                     />
                   </Col>
                 </Row>

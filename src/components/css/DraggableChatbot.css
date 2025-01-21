@@ -1,0 +1,22 @@
+/* DraggableChatbot.css */
+.draggable {
+    position: absolute; /* 確保是絕對定位 */
+    cursor: move; /* 鼠標樣式為移動 */
+    width: 100px; /* 假設寬度為100 */
+    height: 100px; /* 假設高度為100 */
+    background-color: lightgray; /* 背景顏色可自行調整 */
+    z-index: 1000; /* 設置較高的 z-index 以確保在其他元素之上 */
+    /* 其他樣式 */
+  }
+
+
+  .chatbot {
+    position: fixed;
+    bottom: 10%;
+    right: 10%;
+    width: 300px;
+    height: 400px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }

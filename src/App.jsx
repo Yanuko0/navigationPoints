@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import './App.css';
 import { LanguageProvider } from './context/LanguageContext';
+import DraggableChatbot from './components/AiChatbot';
 
 const { Header, Content } = Layout;
 
@@ -19,8 +20,9 @@ const CustomHeader = ({ currentLocation, handleDestinationSelect }) => {
   if (location.pathname === '/stats') {
     return (
       <Header style={{
-        height: 'auto',
+        display: 'none',
         alignItems: 'center'
+
       }}>
       </Header>
     );
@@ -30,7 +32,7 @@ const CustomHeader = ({ currentLocation, handleDestinationSelect }) => {
 };
 
 function App() {
-  const [currentLocation] = useState({
+  const [currentLocation, setCurrentLocation] = useState({
     lat: 24.2254,
     lng: 120.6281
   });
@@ -73,6 +75,7 @@ function App() {
                 <SearchBar 
                   onSelect={handleDestinationSelect}
                   currentLocation={currentLocation}
+                  setCurrentLocation={setCurrentLocation}
                   placeholder="輸入目的地..."
                   username={username}
                 />
@@ -91,6 +94,7 @@ function App() {
               element={<Navigate to="/" replace />} 
             />
           </Routes>
+          <DraggableChatbot />
         </Content>
       </Layout>
     </Router>

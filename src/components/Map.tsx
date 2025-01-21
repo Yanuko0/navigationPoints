@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { GoogleMap, Marker, DirectionsRenderer } from '@react-google-maps/api';
-import { Card, Button } from 'antd';
+import { Card, Button, Modal, Upload, Form, Input, Row, Col } from 'antd';
 import { AimOutlined } from '@ant-design/icons';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase/config';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy, doc, setDoc } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 
 interface MapProps {
@@ -37,7 +37,7 @@ const colors = {
   border: '#E8E0D9'       // 邊框色
 };
 
-const MapComponent = ({ center, destination, username, onRouteCalculated }: MapProps) => {
+const MapComponent = ({ center, destination, username, onRouteCalculated, setCurrentLocation }: MapProps & { setCurrentLocation: (location: { lat: number, lng: number }) => void }) => {
   const navigate = useNavigate();
   const [mapCenter, setMapCenter] = useState({
     lat: 24.2254,
@@ -52,6 +52,15 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
     dailyUses: 0,
     totalDuration: 0,
     totalDistance: 0
+  });
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const [form] = Form.useForm();
+  const [userInfo, setUserInfo] = useState({
+    name: '',
+    age: '',
+    address: '',
+    carType: ''
   });
 
   useEffect(() => {
@@ -131,6 +140,7 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
             lng: position.coords.longitude
           };
           setMapCenter(pos);
+          setCurrentLocation(pos);
         },
         (error) => {
           console.error("Error getting current location:", error);
@@ -194,6 +204,38 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
   useEffect(() => {
     fetchUserStats();
   }, [username]);
+
+  const handleAvatarClick = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleModalOk = () => {
+    form.validateFields().then(async (values) => {
+      try {
+        // 假設用戶ID為 userId
+        const userId = "someUserId"; // 這裡需要替換為實際的用戶ID
+        await setDoc(doc(db, "users", userId), values);
+        setUserInfo(values);
+        setIsModalVisible(false);
+        console.log('資料已成功保存到 Firebase');
+      } catch (error) {
+        console.error('保存到 Firebase 時出錯:', error);
+      }
+    }).catch(info => {
+      console.log('Validate Failed:', info);
+    });
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleAvatarChange = (info: any) => {
+    if (info.file.status === 'done') {
+      // 假設上傳成功後返回的URL在info.file.response.url
+      setAvatar(info.file.response.url);
+    }
+  };
 
   return (
     <div style={{ 
@@ -431,19 +473,26 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
           alignItems: 'center',
           gap: '12px'
         }}>
-          <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '50%',
-            background: colors.secondary,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: colors.cardBg,
-            fontSize: '14px',
-            fontWeight: '500',
-            border: `2px solid ${colors.primary}`
-          }}>
+          <div 
+            style={{
+              width: '32px',
+              height: '32px',
+              borderRadius: '50%',
+              background: colors.secondary,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: colors.cardBg,
+              fontSize: '14px',
+              fontWeight: '500',
+              border: `2px solid ${colors.primary}`,
+              cursor: 'pointer'
+            }}
+            onClick={(event) => {
+              event.stopPropagation();
+              handleAvatarClick();
+            }}
+          >
             {username?.[0]?.toUpperCase()}
           </div>
           <div style={{
@@ -468,6 +517,133 @@ const MapComponent = ({ center, destination, username, onRouteCalculated }: MapP
           </div>
         </div>
       </div>
+
+      <Modal
+        title="編輯個人資料"
+        visible={isModalVisible}
+        onOk={handleModalOk}
+        onCancel={handleModalCancel}
+        footer={null}
+        centered
+        style={{
+          borderRadius: '12px',
+          overflow: 'hidden',
+          backgroundColor: colors.background,
+          padding: '0',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+          border: 'none'
+        }}
+      >
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          gap: '20px',
+          padding: '20px',
+          borderRadius: '12px',
+          backgroundColor: colors.background
+        }}>
+          <Upload
+            name="avatar"
+            listType="picture-card"
+            className="avatar-uploader"
+            showUploadList={false}
+            action="/upload"
+            onChange={handleAvatarChange}
+          >
+            {avatar ? (
+              <div style={{
+                width: '120px',
+                height: '100px',
+                borderRadius: '50%',
+                overflow: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: `2px solid ${colors.primary}`,
+                cursor: 'pointer',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+              }}>
+                <img src={avatar} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+            ) : (
+              <div style={{
+                width: '120px',
+                height: '100px',
+                borderRadius: '50%',
+                background: colors.secondary,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: colors.cardBg,
+                fontSize: '16px',
+                fontWeight: '500',
+                border: `2px solid ${colors.primary}`,
+                cursor: 'pointer',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+              }}>
+                上傳新頭像
+              </div>
+            )}
+          </Upload>
+
+          <Form
+            form={form}
+            layout="vertical"
+            initialValues={userInfo}
+            style={{ width: '100%', maxWidth: '400px' }}
+          >
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  label="姓名"
+                  name="name"
+                >
+                  <Input style={{ borderRadius: '8px', borderColor: colors.border, padding: '8px' }} />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label="年齡"
+                  name="age"
+                >
+                  <Input type="number" style={{ borderRadius: '8px', borderColor: colors.border, padding: '8px' }} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Form.Item
+              label="居住地址"
+              name="address"
+            >
+              <Input style={{ borderRadius: '8px', borderColor: colors.border, padding: '8px' }} />
+            </Form.Item>
+            <Form.Item
+              label="車種"
+              name="carType"
+            >
+              <Input style={{ borderRadius: '8px', borderColor: colors.border, padding: '8px' }} />
+            </Form.Item>
+          </Form>
+
+          <Button 
+            type="primary" 
+            onClick={handleModalOk} 
+            style={{ 
+              width: '100%', 
+              maxWidth: '400px', 
+              backgroundColor: colors.accent, 
+              borderColor: colors.accent, 
+              borderRadius: '8px',
+              padding: '10px 0',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+            }}
+          >
+            保存
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };

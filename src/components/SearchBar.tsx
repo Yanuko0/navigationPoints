@@ -22,13 +22,14 @@ interface LocationOption {
 interface SearchBarProps {
   onSelect: (value: string, option: LocationOption) => void;
   currentLocation?: { lat: number; lng: number };
+  setCurrentLocation: (location: { lat: number; lng: number }) => void;
   placeholder?: string;
   username?: string;
 }
 
 const libraries: Libraries = ["places"];
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSelect, currentLocation, placeholder = "搜尋地點...", username }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSelect, currentLocation, setCurrentLocation, placeholder = "搜尋地點...", username }) => {
   const [options, setOptions] = useState<LocationOption[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [showResults, setShowResults] = useState(false);
@@ -266,6 +267,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSelect, currentLocation, placeh
       <Map
         center={currentLocation}
         destination={selectedLocation?.coordinates}
+        setCurrentLocation={setCurrentLocation}
         username={username}
         onRouteCalculated={handleRouteCalculated}
       />
