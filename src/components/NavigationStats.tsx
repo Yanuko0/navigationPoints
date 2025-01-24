@@ -628,6 +628,16 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
 
   const sortedNavigationHistory = navigationHistory.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
+  // 隨機生成顏色的函數
+  const generateRandomColors = (numColors: number): string[] => {
+    const colors: string[] = [];
+    for (let i = 0; i < numColors; i++) {
+      const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+      colors.push(color);
+    }
+    return colors;
+  };
+
   return (
     <div style={{ 
       padding: '13px',
@@ -1246,7 +1256,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                     )}
                     {activeChart === '4' && (
                       <ChartContainer>
-                        <Line
+                        <Column
                           data={allUsersData
                             .filter(record => 
                               record.distance > 0 && 
@@ -1262,9 +1272,10 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                           xField="date"
                           yField="value"
                           seriesField="username"
+                          color={generateRandomColors(new Set(allUsersData.map(record => record.username)).size)}
                           label={{
-                            position: 'top',
-                            formatter: (datum) => `${datum.value.toFixed(4)}`
+                            position: 'middle',
+                            formatter: (datum: { value: number; date: string; username: string }) => `${datum.value.toFixed(4)}`
                           }}
                         />
                       </ChartContainer>
@@ -1288,7 +1299,7 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                     )}
                     {activeChart === '6' && (
                       <ChartContainer>
-                        <Line
+                        <Column
                           data={navigationHistory.map(record => ({
                             date: new Date(record.timestamp).toLocaleDateString(),
                             value: record.fuelCost / (record.distance * record.duration),
@@ -1297,6 +1308,11 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                           xField="date"
                           yField="value"
                           seriesField="username"
+                          color={generateRandomColors(new Set(navigationHistory.map(record => record.username)).size)}
+                          label={{
+                            position: 'middle',
+                            formatter: (datum: { value: number; date: string; username: string }) => `${datum.value.toFixed(4)}`
+                          }}
                         />
                       </ChartContainer>
                     )}

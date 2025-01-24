@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import './css/DraggableChatbot.css';
+// @ts-ignore
 import chatbotIcon from '../assets/chatbot-icon.png';
 
 const DraggableChatbot: React.FC = () => {

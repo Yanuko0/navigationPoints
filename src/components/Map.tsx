@@ -5,7 +5,7 @@ import { AimOutlined } from '@ant-design/icons';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase/config';
-import { collection, query, where, getDocs, orderBy, doc, setDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy, doc, setDoc, getDoc } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 
 interface MapProps {
@@ -131,6 +131,39 @@ const MapComponent = ({ center, destination, username, onRouteCalculated, setCur
     }
   }, [distance, duration]);
 
+  // 實時更新位置
+  // useEffect(() => {
+  //   let watchId: number;
+
+  //   if (navigator.geolocation) {
+  //     watchId = navigator.geolocation.watchPosition(
+  //       (position) => {
+  //         const pos = {
+  //           lat: position.coords.latitude,
+  //           lng: position.coords.longitude
+  //         };
+  //         setMapCenter(pos);
+  //         setCurrentLocation(pos);
+  //       },
+  //       (error) => {
+  //         console.error("Error watching position:", error);
+  //       },
+  //       {
+  //         enableHighAccuracy: true,
+  //         maximumAge: 0,
+  //         timeout: 5000
+  //       }
+  //     );
+  //   }
+
+  //   // 清除監聽器
+  //   return () => {
+  //     if (navigator.geolocation && watchId !== undefined) {
+  //       navigator.geolocation.clearWatch(watchId);
+  //     }
+  //   };
+  // }, []);
+
   const handleCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -236,6 +269,33 @@ const MapComponent = ({ center, destination, username, onRouteCalculated, setCur
       setAvatar(info.file.response.url);
     }
   };
+
+  // 個人資料初始值
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userId = "someUserId"; // 這裡需要替換為實際的用戶ID
+        const userDoc = await getDoc(doc(db, "users", userId));
+        if (userDoc.exists()) {
+          const data = userDoc.data();
+          const userData = {
+            name: data.name || '',
+            age: data.age || '',
+            address: data.address || '',
+            carType: data.carType || ''
+          };
+          setUserInfo(userData);
+          form.setFieldsValue(userData); // 設置表單的初始值
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error fetching user info:", error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   return (
     <div style={{ 
