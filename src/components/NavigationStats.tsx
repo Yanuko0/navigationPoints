@@ -40,6 +40,7 @@ interface RankingItem {
   totalFuelCost: number;
   totalNavigations: number;
   totalPoints: number;
+  rank?: number;
 }
 
 interface Achievement {
@@ -638,6 +639,9 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
     return colors;
   };
 
+  // 獲取第一名的數據
+  const firstPlace = rankings[activeRanking][0];
+
   return (
     <div style={{ 
       padding: '13px',
@@ -1083,8 +1087,11 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                       borderRadius: '12px',
                       padding: '16px'
                     }}
-                    dataSource={rankings[activeRanking] as RankingItem[]}
-                    renderItem={(item: RankingItem, index) => (
+                    dataSource={[
+                      ...rankings[activeRanking].slice(0, 3).map((item, index) => ({ ...item, rank: index + 1 })),
+                      ...rankings[activeRanking].map((item, index) => ({ ...item, rank: index + 1 })).filter(item => item.username === username)
+                    ]}
+                    renderItem={(item: RankingItem) => (
                       <List.Item
                         style={{
                           borderBottom: `1px solid ${colors.secondary}`,
@@ -1095,9 +1102,9 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                           avatar={
                             <Tag 
                               color={
-                                index === 0 ? colors.gold :
-                                index === 1 ? colors.silver :
-                                index === 2 ? colors.bronze :
+                                item.rank === 1 ? colors.gold :
+                                item.rank === 2 ? colors.silver :
+                                item.rank === 3 ? colors.bronze :
                                 colors.secondary
                               }
                               style={{
@@ -1109,17 +1116,17 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                                 justifyContent: 'center'
                               }}
                             >
-                              {index + 1}
+                              {item.rank ?? '-'}
                             </Tag>
                           }
                           title={
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              {index < 3 && (
+                              {item.rank !== undefined && item.rank <= 3 && (
                                 <span style={{
-                                  color: index === 0 ? colors.gold : 
-                                        index === 1 ? colors.silver : colors.bronze
+                                  color: item.rank === 1 ? colors.gold : 
+                                        item.rank === 2 ? colors.silver : colors.bronze
                                 }}>
-                                  {index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}
+                                  {item.rank === 1 ? '🥇' : item.rank === 2 ? '🥈' : '🥉'}
                                 </span>
                               )}
                               <span>{item.username}</span>
@@ -1132,6 +1139,15 @@ const NavigationStats: React.FC<{ username: string }> = ({ username }) => {
                               {activeRanking === 'fuelCost' && `總油費：${Number(item.totalFuelCost).toFixed(2)} €`}
                               {activeRanking === 'navigations' && `導航次數：${item.totalNavigations} 次`}
                               {activeRanking === 'totalPoints' && `成就積分：${item.totalPoints} 分`}
+                              {item.username === username && firstPlace && (
+                                <span style={{ color: colors.accent }}>
+                                  {activeRanking === 'distance' && `，距離第一名還差：${(firstPlace.totalDistance - item.totalDistance).toFixed(1)} km`}
+                                  {activeRanking === 'duration' && `，距離第一名還差：${(firstPlace.totalDuration - item.totalDuration).toFixed(0)} 分鐘`}
+                                  {activeRanking === 'fuelCost' && `，距離第一名還差：${(firstPlace.totalFuelCost - item.totalFuelCost).toFixed(2)} €`}
+                                  {activeRanking === 'navigations' && `，距離第一名還差：${firstPlace.totalNavigations - item.totalNavigations} 次`}
+                                  {activeRanking === 'totalPoints' && `，距離第一名還差：${firstPlace.totalPoints - item.totalPoints} 分`}
+                                </span>
+                              )}
                             </span>
                           }
                         />

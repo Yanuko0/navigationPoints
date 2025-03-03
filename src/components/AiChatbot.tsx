@@ -207,6 +207,45 @@ const DraggableChatbot: React.FC = () => {
     );
   };
 
+  const handleUserInputSubmit = async () => {
+    if (!userInput.trim()) return;
+
+    // 將用戶輸入添加到聊天記錄中
+    setChatHistory(prev => [
+      ...prev,
+      { sender: 'user', message: userInput }
+    ]);
+
+    try {
+      // 發送 POST 請求到 API
+      const response = await fetch('http://127.0.0.1:5000/Chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: userInput }),
+      });
+
+      const data = await response.json();
+      const aiResponse = data.response || '抱歉，我無法理解您的問題。';
+
+      // 將 AI 回應添加到聊天記錄中
+      setChatHistory(prev => [
+        ...prev,
+        { sender: 'ai', message: aiResponse }
+      ]);
+    } catch (error) {
+      console.error('Error fetching AI response:', error);
+      setChatHistory(prev => [
+        ...prev,
+        { sender: 'ai', message: '抱歉，無法獲取回應。' }
+      ]);
+    }
+
+    // 清空用戶輸入
+    setUserInput('');
+  };
+
   return (
     <div
       style={{ userSelect: 'none' }}
@@ -281,6 +320,34 @@ const DraggableChatbot: React.FC = () => {
                 )}
               </div>
             )}
+          </div>
+          <div style={{ display: 'flex', marginTop: '10px' }}>
+            <input
+              type="text"
+              value={userInput}
+              onChange={(e) => setUserInput(e.target.value)}
+              placeholder="輸入您的問題..."
+              style={{
+                flex: 1,
+                padding: '10px',
+                borderRadius: '5px',
+                border: '1px solid #ddd',
+                marginRight: '5px'
+              }}
+            />
+            <button
+              onClick={handleUserInputSubmit}
+              style={{
+                padding: '10px 15px',
+                borderRadius: '5px',
+                backgroundColor: '#E3A587',
+                color: 'white',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              發送
+            </button>
           </div>
         </div>
       )}

@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import { GoogleMap, Marker, DirectionsRenderer } from '@react-google-maps/api';
-import { Card, Button, Modal, Upload, Form, Input, Row, Col } from 'antd';
+import { Card, Button, Modal, Upload, Form, Input, Row, Col, message } from 'antd';
 import { AimOutlined } from '@ant-design/icons';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../firebase/config';
+import { db, storage } from '../firebase/config';
 import { collection, query, where, getDocs, orderBy, doc, setDoc, getDoc } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
+import AvatarEditor from 'react-avatar-editor';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { getAuth } from 'firebase/auth';
+
 
 interface MapProps {
   center?: {
@@ -62,6 +66,11 @@ const MapComponent = ({ center, destination, username, onRouteCalculated, setCur
     address: '',
     carType: ''
   });
+  const [image, setImage] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editor, setEditor] = useState<AvatarEditor | null>(null);
+
+  const auth = getAuth();
 
   useEffect(() => {
     if (center) {
@@ -245,8 +254,7 @@ const MapComponent = ({ center, destination, username, onRouteCalculated, setCur
   const handleModalOk = () => {
     form.validateFields().then(async (values) => {
       try {
-        // 假設用戶ID為 userId
-        const userId = "someUserId"; // 這裡需要替換為實際的用戶ID
+        const userId = auth.currentUser ? auth.currentUser.uid : "defaultUserId";
         await setDoc(doc(db, "users", userId), values);
         setUserInfo(values);
         setIsModalVisible(false);
@@ -265,8 +273,31 @@ const MapComponent = ({ center, destination, username, onRouteCalculated, setCur
 
   const handleAvatarChange = (info: any) => {
     if (info.file.status === 'done') {
-      // 假設上傳成功後返回的URL在info.file.response.url
-      setAvatar(info.file.response.url);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImage(reader.result as string);
+        setIsEditing(true);
+
+        // 僅顯示圖片，不上傳到 Firebase
+        setAvatar(reader.result as string);
+        console.log('圖片已加載，未上傳到 Firebase');
+      };
+      reader.readAsDataURL(info.file.originFileObj);
+    }
+  };
+
+  const handleSave = async () => {
+    if (editor) {
+      const canvas = editor.getImageScaledToCanvas().toDataURL();
+      const userId = auth.currentUser ? auth.currentUser.uid : "defaultUserId"; // 確保使用實際的用戶ID
+      const avatarRef = ref(storage, `avatars/${userId}.png`);
+      const response = await fetch(canvas);
+      const blob = await response.blob();
+      await uploadBytes(avatarRef, blob);
+      const url = await getDownloadURL(avatarRef);
+      setAvatar(url);
+      setIsEditing(false);
+      console.log('圖片已成功上傳到 Firebase');
     }
   };
 
@@ -274,7 +305,7 @@ const MapComponent = ({ center, destination, username, onRouteCalculated, setCur
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const userId = "someUserId"; // 這裡需要替換為實際的用戶ID
+        const userId = auth.currentUser ? auth.currentUser.uid : "defaultUserId";
         const userDoc = await getDoc(doc(db, "users", userId));
         if (userDoc.exists()) {
           const data = userDoc.data();
@@ -285,7 +316,7 @@ const MapComponent = ({ center, destination, username, onRouteCalculated, setCur
             carType: data.carType || ''
           };
           setUserInfo(userData);
-          form.setFieldsValue(userData); // 設置表單的初始值
+          form.setFieldsValue(userData);
         } else {
           console.log("No such document!");
         }
@@ -603,49 +634,61 @@ const MapComponent = ({ center, destination, username, onRouteCalculated, setCur
           borderRadius: '12px',
           backgroundColor: colors.background
         }}>
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-            action="/upload"
-            onChange={handleAvatarChange}
-          >
-            {avatar ? (
-              <div style={{
-                width: '120px',
-                height: '100px',
-                borderRadius: '50%',
-                overflow: 'hidden',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: `2px solid ${colors.primary}`,
-                cursor: 'pointer',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-              }}>
-                <img src={avatar} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-            ) : (
-              <div style={{
-                width: '120px',
-                height: '100px',
-                borderRadius: '50%',
-                background: colors.secondary,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: colors.cardBg,
-                fontSize: '16px',
-                fontWeight: '500',
-                border: `2px solid ${colors.primary}`,
-                cursor: 'pointer',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-              }}>
-                上傳新頭像
-              </div>
-            )}
-          </Upload>
+          {isEditing ? (
+            <div>
+              <AvatarEditor
+                ref={setEditor}
+                image={image}
+                width={150}
+                height={150}
+                border={50}
+                borderRadius={75} // 圓形裁切
+                scale={1.2}
+              />
+              <Button onClick={handleSave}>保存裁切後的圖片</Button>
+            </div>
+          ) : (
+            <Upload
+              name="avatar"
+              listType="picture-card"
+              className="avatar-uploader"
+              showUploadList={false}
+              beforeUpload={(file) => {
+                const isLt5M = file.size / 1024 / 1024 < 5;
+                if (!isLt5M) {
+                  message.error('圖片必須小於 5MB!');
+                }
+                return isLt5M;
+              }}
+              customRequest={({ file, onSuccess }) => {
+                // 檢查 file 是否是 File 類型
+                if (file instanceof File) {
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    setImage(reader.result as string);
+                    setIsEditing(true);
+
+                    // 僅顯示圖片，不上傳到 Firebase
+                    setAvatar(reader.result as string);
+                    console.log('圖片已加載，未上傳到 Firebase');
+                    
+                    if (onSuccess) {
+                      onSuccess("ok"); // 通知上傳成功
+                    }
+                  };
+                  reader.readAsDataURL(file);
+                } else {
+                  console.error("File is not of type File");
+                }
+              }}
+            >
+              {avatar ? (
+                <img src={avatar} alt="avatar" style={{ width: '100%' }} />
+              ) : (
+                <div>上傳新頭像</div>
+              )}
+            </Upload>
+          )}
 
           <Form
             form={form}

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Card, message, FloatButton } from 'antd';
 import { UserOutlined, LockOutlined, CompassOutlined, MoonOutlined, SunOutlined } from '@ant-design/icons';
 import styled, { keyframes } from 'styled-components';
+// import FaceRecognitionLibrary from 'face-recognition-library';
 
 
 const rotate = keyframes`
@@ -38,8 +39,6 @@ const moonShine = keyframes`
     filter: drop-shadow(0 0 8px #C1C1D1);
   }
 `;
-
-
 
 interface StyledProps {
   colors?: {
@@ -142,6 +141,18 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       }
       setLoading(false);
     }, 1000);
+  };
+
+  const handleFaceRecognition = () => {
+    // 這裡是調用臉部辨識的邏輯
+    // FaceRecognitionLibrary.recognize().then(result => {
+    //   if (result.success) {
+    //     onLogin(result.username);
+    //     message.success('臉部辨識成功，登入中...');
+    //   } else {
+    //     message.error('臉部辨識失敗，請重試。');
+    //   }
+    // });
   };
 
   return (
@@ -286,6 +297,26 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               登入
             </Button>
           </Form.Item>
+          {/* <Form.Item style={{ marginBottom: '12px' }}>
+            <Button 
+              type="default" 
+              onClick={handleFaceRecognition}
+              style={{
+                width: '100%',
+                height: '45px',
+                borderRadius: '12px',
+                backgroundColor: colors.buttonBg,
+                border: `1px solid ${colors.primary}`,
+                boxShadow: `0 4px 12px ${colors.shadow}`,
+                fontSize: '16px',
+                fontWeight: 500,
+                letterSpacing: '1px',
+                transition: 'all 0.3s ease'
+              }}
+            >
+              臉部辨識登入
+            </Button>
+          </Form.Item> */}
         </Form>
       </Card>
     </div>
