@@ -328,6 +328,11 @@ const MapComponent = ({ center, destination, username, onRouteCalculated, setCur
     fetchUserInfo();
   }, []);
 
+  // 確保在使用 setEditor 時，傳入的參數是 AvatarEditor 的實例
+  const handleEditorRef = (instance: InstanceType<typeof AvatarEditor> | null) => {
+    setEditor(instance);
+  };
+
   return (
     <div style={{ 
       position: 'relative', 
@@ -636,15 +641,17 @@ const MapComponent = ({ center, destination, username, onRouteCalculated, setCur
         }}>
           {isEditing ? (
             <div>
-              <AvatarEditor
-                ref={setEditor}
-                image={image}
-                width={150}
-                height={150}
-                border={50}
-                borderRadius={75} // 圓形裁切
-                scale={1.2}
-              />
+              {image && (
+                <AvatarEditor
+                  ref={setEditor}
+                  image={image}
+                  width={150}
+                  height={150}
+                  border={50}
+                  borderRadius={75} // 圓形裁切
+                  scale={1.2}
+                />
+              )}
               <Button onClick={handleSave}>保存裁切後的圖片</Button>
             </div>
           ) : (
