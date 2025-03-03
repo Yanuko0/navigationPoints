@@ -615,7 +615,7 @@ const MapComponent = ({ center, destination, username, onRouteCalculated, setCur
       </div>
 
       <Modal
-        title="編輯個人資料"
+        title="編輯資料"
         visible={isModalVisible}
         onOk={handleModalOk}
         onCancel={handleModalCancel}
